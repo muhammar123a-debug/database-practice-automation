@@ -74,7 +74,25 @@ GROUP BY c.course_name;
 for i in cursor.fetchall():
     print(i)
 
+print("\n Har student ka naam aur course (agar hai):")
+cursor.execute("""
+SELECT s.name, c.course_name
+FROM students s
+LEFT JOIN courses c ON s.course_id = c.id;
+""")
+for i in cursor.fetchall():
+    print(i)
 
+print("\n Jo students ke paas course nahi hai:")
+cursor.execute("""
+SELECT s.name
+FROM students s
+LEFT JOIN courses c ON s.course_id = c.id
+WHERE c.id IS NULL;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+    
 
 conn.commit()
-print("Inserted data")
