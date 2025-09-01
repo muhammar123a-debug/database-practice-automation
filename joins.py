@@ -67,10 +67,14 @@ for i in cursor.fetchall():
 
 cursor.execute("""
 SELECT c.course_name, COUNT(s.id) AS total_students
-FROM students
+FROM students s
 INNER JOIN courses c ON s.course_id = c.id
 GROUP BY c.course_name;
 """)
+for i in cursor.fetchall():
+    print(i)
+
+
 
 conn.commit()
 print("Inserted data")
