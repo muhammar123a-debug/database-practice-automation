@@ -1,67 +1,76 @@
 import mysql.connector
 
-connect = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Ammar@#$"
+conn = mysql.connector.connect(
+    host = "localhost",
+    user = "root",
+    password = "Ammar@#$",
+    database = "practice"
 )
 
-cursor = connect.cursor()
+cursor = conn.cursor()
 
-# Create database
-cursor.execute("CREATE DATABASE IF NOT EXISTS practice")
-cursor.execute("USE practice")
-print("Database created")
-
-# Delete old tables if exists
 cursor.execute("DROP TABLE IF EXISTS students")
-cursor.execute("DROP TABLE IF EXISTS classes")
+cursor.execute("DROP TABLE IF EXISTS courses")
 
-# Create tables
+cursor.execute("CREATE TABLE IF NOT EXISTS students(id INT AUTO_INCREMENT PRIMARY KEY,name VARCHAR(50),city VARCHAR(50),course_id INT)")
+cursor.execute("CREATE TABLE IF NOT EXISTS courses(id INT PRIMARY KEY,course_name VARCHAR(50),teacher VARCHAR(50))")
+
 cursor.execute("""
-CREATE TABLE classes(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    class_name VARCHAR(50)
-)
+INSERT INTO students (name, city, course_id) VALUES 
+('Ali', 'Karachi', 101),
+('Sara', 'Lahore', 102),
+('Ahmed', 'Islamabad', NULL),
+('Fatima', 'Karachi', NULL),
+('Bilal', 'Lahore', 101),
+('Ayesha', 'Multan', 104),
+('Hamza', 'Karachi', NULL),
+('Noor', 'Islamabad', 105)
 """)
 
 cursor.execute("""
-CREATE TABLE students(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50),
-    class_id INT,
-    FOREIGN KEY (class_id) REFERENCES classes(id)
-)
+INSERT INTO courses (id, course_name, teacher) VALUES
+(101, 'Database', 'Sir Ali'),
+(102, 'Python', 'Miss Sara'),
+(103, 'Data Science', 'Sir Ahmed'),
+(104, 'AI', 'Dr. Fatima'),
+(106, 'Cyber Security', 'Sir Zain');
 """)
-print("✅ Tables Created")
 
-# Step 1: Insert classes first
-cursor.executemany("INSERT INTO classes (class_name) VALUES (%s)", [
-    ("Computer Science",),
-    ("Mathematics",),
-    ("Physics",)
-])
-
-# Step 2: Insert students (now class_id exists)
-cursor.executemany("INSERT INTO students (name, class_id) VALUES (%s,%s)", [
-    ("Ali", 1),
-    ("Farooq", 2),
-    ("Hasim", 3),
-    ("Hina", None)  # None = NULL
-])
-
-connect.commit()
-print("✅ Data Inserted")
-
-# INNER JOIN
-print("\n🔹 INNER JOIN Result:")
+cursor.execute("""SELECT s.name, c.course_name FROM students s INNER JOIN courses c ON s.course_id = c.id;""")
+for i in cursor.fetchall():
+    print(i)
 cursor.execute("""
-SELECT students.name, classes.class_name
+SELECT s.name, c.course_name, c.teacher
+FROM students s
+INNER JOIN courses c
+ON  s.course_id = c.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+cursor.execute("""
+SELECT s.name, c.course_name, s.city
+FROM students s
+INNER JOIN courses c ON s.course_id = c.id
+WHERE s.city = 'Lahore';
+""")
+for i in cursor.fetchall():
+    print(i)
+
+cursor.execute("""
+SELECT s.name, c.course_name
+FROM students s
+INNER JOIN courses c ON s.course_id = c.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+cursor.execute("""
+SELECT c.course_name, COUNT(s.id) AS total_students
 FROM students
-INNER JOIN classes ON students.class_id = classes.id
+INNER JOIN courses c ON s.course_id = c.id
+GROUP BY c.course_name;
 """)
-for row in cursor.fetchall():
-    print(row)
 
-cursor.close()
-connect.close()
+conn.commit()
+print("Inserted data")
