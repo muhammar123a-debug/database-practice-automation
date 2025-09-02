@@ -93,6 +93,33 @@ WHERE c.id IS NULL;
 for i in cursor.fetchall():
     print(i)
 
-    
+print("\n Karachi ke students ke saath course:")
+cursor.execute("""
+SELECT s.name, c.course_name
+FROM students s
+LEFT JOIN courses c ON s.course_id = c.id
+WHERE s.city = 'Karachi';
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Students + teacher (agar course linked hai):")
+cursor.execute("""
+SELECT s.name, c.teacher
+FROM students s
+LEFT JOIN courses c ON s.course_id = c.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Har student aur unke course ka naam sort by student:")
+cursor.execute("""
+SELECT s.name, c.course_name
+FROM students s
+LEFT JOIN courses c ON s.course_id = c.id
+ORDER BY s.name ASC;
+""")
+for i in cursor.fetchall():
+    print(i)
 
 conn.commit()
