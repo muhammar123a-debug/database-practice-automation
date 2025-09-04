@@ -79,6 +79,49 @@ cursor.execute("SELECT * FROM order_items")
 for i in cursor.fetchall():
     print(i)
 
+print("\n SELECT (Read Data)")
+cursor.execute("SELECT * FROM customers")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n SELECT (name and city data)")
+cursor.execute("SELECT name,city FROM customers")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n WHERE (Filtering)")
+print("\n -- Lahore ke customers")
+cursor.execute("SELECT * FROM customers WHERE city = 'Lahore'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n -- 50,000 se mehange products")
+cursor.execute("SELECT * FROM products WHERE price > 50000;")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n -- Pending orders")
+cursor.execute("SELECT * FROM orders WHERE status = 'pending'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n -- Customer ka city update karo")
+cursor.execute("UPDATE customers SET city = 'canada' WHERE id = 1")
+for i in cursor.fetchall():
+    print(i)
+
+cursor.execute("SELECT * FROM customers;")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n -- Product ka stock update karo")
+cursor.execute("UPDATE products SET stock = stock - 2 WHERE id = 1")
+for i in cursor.fetchall():
+    print(i)
+
+cursor.execute("SELECT * FROM products;")
+for i in cursor.fetchall():
+    print(i)
+
 conn.commit()
 
-print("Sample customers & products added ✅")
