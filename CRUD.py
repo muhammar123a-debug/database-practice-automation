@@ -70,4 +70,91 @@ cursor.execute("SELECT * FROM customers")
 for i in cursor.fetchall():
     print(i)
 
+# cursor.execute("DELETE FROM customers WHERE id = 3")
+# cursor.execute("DELETE FROM customers WHERE city = 'Lahore'")
+# cursor.execute("DELETE FROM customers WHERE id > 5")
+# cursor.execute("DELETE FROM customers")
+# cursor.execute("SELECT * FROM customers")
+# for i in cursor.fetchall():
+#     print(i)
+
+#START FILTERINGG & SORTING
+print("\n FILTERING & SORTING")
+print("\n Select all customers where city = 'Karachi'")
+cursor.execute("SELECT * FROM customers WHERE city = 'Islamabad'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Select customers where id < 5")
+cursor.execute("SELECT * FROM customers WHERE id < 5")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Select customers where id > 3")
+cursor.execute("SELECT * FROM customers WHERE id > 3")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Select customers where city != 'Lahore'")
+cursor.execute("SELECT * FROM customers WHERE city != 'Lahore'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Select customers where phone IS NULL")
+cursor.execute("SELECT * FROM customers WHERE phone IS NULL")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n LIKE with Wildcards (3 Tasks)")
+cursor.execute("SELECT * FROM customers WHERE name LIKE 'A%'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Customers whose names end with 'n'")
+cursor.execute("SELECT * FROM customers WHERE name LIKE '%n'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Customers whose email contain 'gmail.com'")
+cursor.execute("SELECT * FROM customers WHERE email LIKE '%gmail.com'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n IN, BETWEEN, AND, OR (4 Tasks)")
+print("\n customers in cities 'Lahore', 'Karachi', 'Islamabad'")
+cursor.execute("SELECT * FROM customers WHERE city IN ('Lahore','karachi','Islamabad') ")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Customers with id between 2 and 5")
+cursor.execute("SELECT * FROM customers WHERE id BETWEEN 2 AND 5")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Customers with city = 'Karachi' OR city = 'Lahore'")
+cursor.execute("SELECT * FROM customers WHERE city = 'Islamabad' OR city = 'Lahore'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Customers with city = 'Karachi' AND name LIKE 'F%'")
+cursor.execute("SELECT * FROM customers WHERE city = 'Islamabad' AND name LIKE 'A%'")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Sorting & Limit (3 Tasks)")
+print("\n Customers sorted by name ASC")
+cursor.execute("SELECT * FROM customers ORDER BY name ASC")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Customers sorted by id DESC")
+cursor.execute("SELECT * FROM customers ORDER BY id DESC")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n customers sorted by top 3, name ASC")
+cursor.execute("SELECT * FROM customers ORDER BY name ASC LIMIT 3")
+for i in cursor.fetchall():
+    print(i)
+
 connect.commit()
