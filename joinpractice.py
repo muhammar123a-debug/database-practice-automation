@@ -136,4 +136,102 @@ WHERE c.city = 'Karachi';
 for i in cursor.fetchall():
     print(i)
 
+print("\n 5 LEFT JOIN Tasks")
+print("\n 1. Sab customers aur unke orders dikhayo (agar customer ne order nahi diya to bhi show karo)")
+cursor.execute("""
+SELECT c.name AS customer_name, o.order_date, o.product_id
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 2. Sab customers aur unke products dikhayo (agar customer ne order nahi diya to product NULL hoga).")
+cursor.execute("""
+SELECT c.name AS customer_name, p.product_name
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id
+LEFT JOIN products p ON o.product_id = p.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n Sab products aur unka order count dikhayo (agar product order nahi hua to count = 0).")
+cursor.execute("""
+SELECT p.product_name, COUNT(o.id) AS order_count
+FROM products p
+LEFT JOIN orders o ON p.id = o.product_id
+GROUP BY p.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 4. Un customers ko highlight karo jinhon ne abhi tak order nahi diya.")
+cursor.execute("""
+SELECT c.name, c.email, c.city
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id
+WHERE o.id IS NULL;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 5. Sab customers ke saath unke last order date dikhayo (agar order nahi diya to NULL).")
+cursor.execute("""
+SELECT c.name, MAX(o.order_date) AS Last_Order_Date
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id
+GROUP BY c.name;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 5 RIGHT JOIN Tasks")
+print("\n 1. ab orders aur unke customers dikhayo (agar customer missing ho to NULL aayega)")
+cursor.execute("""
+SELECT o.id AS order_id, c.name AS customer_name, o.order_date, o.product_id
+FROM orders o
+RIGHT JOIN customers c ON o.customer_id = c.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 2. Sab orders aur unke products dikhayo (agar product missing ho to NULL aayega).")
+cursor.execute("""
+SELECT o.id AS order_id, p.product_name, o.order_date, o.quantity
+FROM products p
+RIGHT JOIN orders o ON p.id = o.product_id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 3. Sab products aur unke orders dikhayo (RIGHT JOIN use karke).")
+cursor.execute("""
+SELECT p.product_name, o.id AS order_id, o.order_date, o.quantity
+FROM products p
+RIGHT JOIN orders o ON p.id = o.product_id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 4. Sab customers aur unke orders count dikhayo (RIGHT JOIN).")
+cursor.execute("""
+SELECT c.name AS customer_name, COUNT(o.id) AS order_count
+FROM customers c
+RIGHT JOIN orders o ON c.id = o.customer_id
+GROUP BY c.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 5. Sab orders ke saath customer name aur product name dikhayo (RIGHT JOIN).")
+cursor.execute("""
+SELECT o.id AS order_id, c.name AS customer_name, p.product_name, o.order_date, o.quantity
+FROM orders o
+RIGHT JOIN customers c ON o.customer_id = c.id
+RIGHT JOIN products p ON o.product_id = p.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
 connect.commit()
