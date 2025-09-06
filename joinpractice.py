@@ -46,7 +46,6 @@ CREATE TABLE orders(
 )
 """)
 
-
 # --- Insert customers ---
 cursor.executemany("""
 INSERT INTO customers (name, email, phone, city)
@@ -85,8 +84,56 @@ VALUES (%s, %s, %s, %s)
     (6, 2, "2025-09-04", 1)    
 ])
 
+#Joins Practice Task List
+print("\n5 INNER JOIN Tasks")
 
+print("\n 1. Customers aur unke orders show karo")
+cursor.execute("""
+SELECT c.name, o.order_date, o.product_id
+FROM customers c
+INNER JOIN orders o ON c.id = o.customer_id
+""")
+for i in cursor.fetchall():
+    print(i)
 
-print("Tables created successfully.")
+print("\n 2. Customers aur unke products show karo")
+cursor.execute("""
+SELECT c.name, p.product_name
+FROM customers c
+INNER JOIN orders o ON c.id = o.customer_id
+INNER JOIN products p ON o.product_id = p.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 3. Orders ke sath product ki price aur total amount nikalo (quantity * price)")
+cursor.execute("""
+SELECT c.name AS customer_name, p.product_name, p.price, o.quantity, (p.price * o.quantity) AS total_amount
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.id
+INNER JOIN products p ON o.product_id = p.id;
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 4. Sirf un customers ko dikhayo jin ke orders hain")
+cursor.execute("""
+SELECT DISTINCT c.name, c.email, c.city
+FROM customers c
+INNER JOIN orders o ON c.id = o.customer_id
+""")
+for i in cursor.fetchall():
+    print(i)
+
+print("\n 5. Karachi ke customers ke orders aur unke product names list karo")
+cursor.execute("""
+SELECT c.name AS customer_name, p.product_name, o.order_date, o.quantity, c.city
+FROM customers c
+INNER JOIN orders o ON c.id = o.customer_id
+INNER JOIN products p ON o.product_id = p.id
+WHERE c.city = 'Karachi';
+""")
+for i in cursor.fetchall():
+    print(i)
 
 connect.commit()
